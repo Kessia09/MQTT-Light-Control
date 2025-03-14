@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MQTT Light Control</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mqtt/4.3.7/mqtt.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            padding: 50px;
+        }
+        h2 {
+            color: #333;
+        }
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .on-btn {
+            background-color: #28a745;
+            color: white;
+        }
+        .off-btn {
+            background-color: #dc3545;
+            color: white;
+        }
+        #status {
+            font-size: 20px;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <h2>Light Control</h2>
+    <button class="on-btn" onclick="sendCommand('ON')">Turn ON</button>
+    <button class="off-btn" onclick="sendCommand('OFF')">Turn OFF</button>
+    <p id="status">Status: Waiting for command...</p>
+    
+    <script>
+        const client = mqtt.connect('wss://test.mosquitto.org:8081'); // Connect to public MQTT broker
+
+        client.on('connect', function () {
+            console.log("Connected to MQTT broker");
+        });
+        
+        function sendCommand(command) {
+            client.publish('/student_group/light_control', command);
+            document.getElementById('status').innerText = "Status: " + command;
+        }
+    </script>
+</body>
+</html>
